@@ -1,7 +1,8 @@
-class Leaves {
+class Leaves extends Blower {
   
   
   ArrayList<PVector> leaves;
+  ArrayList<PVector> velLeaves;
   int AMOUNT = 0;
   int wait_sec = 1000 * 1;
   
@@ -19,9 +20,10 @@ class Leaves {
   void generateLeaves(int amount, int width, int height) {
     // Generiere <amount> zufällige Blätter
     for (int i = 0; i < amount; i++) {
-        int x = int(random(camWidth, width)); //float zu int geändert und statt (int)random(...) -> int(random(...)), ist Processing Funktion
-        int y = int(random(height));
+        float x = (int)random(camWidth, width);
+        float y = (int)random(height);
         leaves.add(new PVector(x, y));
+        velLeaves.add(new PVector(0,0,0));
         System.out.println("Blatt generiert bei x:" + x + " y: " + y);
     }
   }
@@ -32,14 +34,14 @@ class Leaves {
         if (leaf == null) {
             println("Null bei Index " + i);
         } else {
-            println("Leaf gefunden bei Index " + i + ": x = " + leaf.x + ", y = " + leaf.y);
+            println("Leaf bei Index " + i + ": x = " + leaf.x + ", y = " + leaf.y);
         }
     }
 }
   
   
-  void leafDisplay() { 
-    // Zeichne alle Blätter als kleine Rechtecke
+  void display() {
+    // Zeichne alle Blätter als kleine Kreise
     if (leaves.isEmpty()) {
         println("Keine Blätter in der Liste.");
         return;
@@ -49,23 +51,29 @@ class Leaves {
    
     for (int i = 0; i < leaves.size(); i++) {
       PVector leaf = leaves.get(i); // Hole das aktuelle PVector-Objekt
-      
-      System.out.println("Blatt display try bei x:"+ leaf.x +"y: "+leaf.y );
-      
-         if (leaf == null) {
+      if (leaf == null) {
          println("Null-Wert bei Index " + i + " in leaves.");
          continue; // Überspringe diesen Eintrag
          }
+      System.out.println("Blatt display try bei x:"+ leaf.x +"y: "+leaf.y );
+      PVector velLeaf=MoveLeaf(leaf);
+      if(velLeaf.z>0){
+      float vel=20-velLeaf.z;
+      float xChange=velLeaf.x*vel;
+      float yChange=velLeaf.x*vel;
+      leaf.x=leaf.x+xChange;
+      leaf.y=leaf.y+yChange;
       
+      }
       
-      //println("Blatt vor Abbildung mit rect(): x=" + leaf.x + ", y=" + leaf.y);
+      println("Blatt vor rect(): x=" + leaf.x + ", y=" + leaf.y);
       try {
-           fill(255, 255, 0);
+            fill(255, 255, 0);
             rect(leaf.x, leaf.y, 20, 20); // Zeichne Blatt
       } catch (Exception e) {
-            println("Fehler beim Zeichnen des Leaf: " + i + "Fehler: " + e.getMessage()); 
+            println("Fehler beim Zeichnen des Rechtecks: " + e.getMessage());
       }
-      //println("Blatt nach Abbildung mit rect(): x=" + leaf.x + ", y=" + leaf.y); //Test um zu gucken ob Leaf PVector Element versehentlich verändert wurde
+      println("Blatt nach rect(): x=" + leaf.x + ", y=" + leaf.y);
       
       System.out.println("Blatt display success bei x:"+ leaf.x +"y: "+leaf.y );
     }
