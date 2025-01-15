@@ -197,7 +197,7 @@ void draw() {
     
     
  
-    Radius= Radius();
+    
     
     
     
@@ -242,6 +242,7 @@ void draw() {
     System.out.println("Keine faces erkannt oder Array ist leer.");
   }
     }*/
+        Radius= Radius();
         Rectangle[] playerPos = Arrays.copyOf(faces, faces.length);
         if (faces != null && faces.length > 0){
         
@@ -252,7 +253,8 @@ void draw() {
         stroke(0, 255, 255); 
         strokeWeight(3);
         rect(posX-objectWidth/2,posY-objectHeight/2,50,50);
-        circle(posX,posY,Radius);
+        println("posY pre"+posY);
+        circle(posX,posY,Radius*2);
         
        
    
@@ -278,9 +280,9 @@ void draw() {
  float Radius(){   
    float Radius = getLautstärke();
    println("Amplitude: " + Radius);
-   RadiusKreis= map(Radius,0,0.02,300,500); // Amplitude wird hoch skalliert
-   if(RadiusKreis>500){RadiusKreis=500;}
-   if(RadiusKreis<300){RadiusKreis=300;}
+   RadiusKreis= map(Radius,0,0.02,100,300); // Amplitude wird hoch skalliert
+   if(RadiusKreis>300){RadiusKreis=300;}
+   if(RadiusKreis<100){RadiusKreis=100;}
    return RadiusKreis;
  } 
 
@@ -293,14 +295,20 @@ PVector MoveLeaf(PVector Leaf){
    println("playerPosy"+posY);
    println("Leafx"+ Leaf.x);
    println("Leafy"+ Leaf.y);
-    if(dist(posX,posY,Leaf.x,Leaf.y)<Radius){
+   println("radius"+Radius);
+    if(((dist(posX,posY,Leaf.x,Leaf.y)<Radius) && (dist(posX,posY,Leaf.x,Leaf.y)>=0)) || (dist(posX,posY,Leaf.x,Leaf.y)>((-1)*Radius) && (dist(posX,posY,Leaf.x,Leaf.y)<=0))  ){
       println("velocity:"+dist(posX,posY,Leaf.x,Leaf.y));
-    float velocityLeaf=Radius-dist(posX,posY,Leaf.x,Leaf.y);
+    float velocityLeaf=(Radius-dist(posX,posY,Leaf.x,Leaf.y))*0.07;
+    println("velocityafternerf"+velocityLeaf);
     float xDiffrence=Leaf.x-posX;
     float yDiffrence=Leaf.y-posY;
-    PVector leafVector= new PVector(velocityLeaf,xDiffrence,yDiffrence);
+    println("xDiffrence"+ xDiffrence);
+    println("yDiffrence"+ yDiffrence);
+    PVector leafVector= new PVector(xDiffrence,yDiffrence,velocityLeaf);
+    println("leafvec"+ leafVector);
     return leafVector;
     }else{
+      println("Error");
       PVector Error= new PVector(0,0,0);
       return Error;
     }
