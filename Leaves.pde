@@ -1,4 +1,4 @@
-class Leaves extends Blower {
+class Leaves  {
   
   
   ArrayList<PVector> leaves;
@@ -8,10 +8,12 @@ class Leaves extends Blower {
   
   
   Leaves(int count, int width, int height) {
-    
+    println("testvorLEaves");
     leaves = new ArrayList<PVector>();
+    velLeaves= new ArrayList<PVector>();
     generateLeaves(count, width, height);
     
+    println("test2");
   }
   
   
@@ -40,7 +42,7 @@ class Leaves extends Blower {
 }
   
   
-  void display() {
+  void leafDisplay() {
     // Zeichne alle Blätter als kleine Kreise
     if (leaves.isEmpty()) {
         println("Keine Blätter in der Liste.");

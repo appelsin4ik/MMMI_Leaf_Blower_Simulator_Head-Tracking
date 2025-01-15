@@ -18,13 +18,17 @@ Capture video;
 OpenCV opencv;
 Player player;
 Leaves leaves;    
-int camWidth = 640;
-int camHeight = 360;
+/*int camWidth = 640;
+int camHeight = 360;*/
+int camWidth,camHeight;
 Rectangle playerPos = new Rectangle(0,0,0,0);
 int[] pPosX;
 int[] pPosY;
+float posX=500;
+float posY=500;
 float rotation, objectWidth = 50, objectHeight = 50;
 float RadiusKreis=0;
+float Radius;
 
 
 
@@ -73,9 +77,10 @@ void setup() {
   
   
   //Erstellen von Leaves + -> Klasse
+  println("test1");
   leaves = new Leaves( 15, width, height); //Leaves werden generiert, steht nur hier vorne, vor video..., um ohne Kamera zu checken ob es funktioniert
   leaves.debugLeaves(); //zeigt alle Leaf-Positionen an
-  
+  println("testnachLeaf");
   
   
   //Gesichserkennung
@@ -191,12 +196,8 @@ void draw() {
   
     
     
-    
-   float Radius = getLautstärke();
-   println("Amplitude: " + Radius);
-   RadiusKreis= map(Radius,0,0.02,50,300); // Amplitude wird hoch skalliert
-    
-    
+ 
+    Radius= Radius();
     
     
     
@@ -205,12 +206,11 @@ void draw() {
     
 
     //Blower/PLayer Display
-  if (faces != null && faces.length > 0) {
+ /* if (faces != null && faces.length > 0) {
     //System.out.println("Faces vor der Übergabe: " + Arrays.toString(faces));
   
-    
-    fill(255, 0, 0);
-    noStroke();
+  
+   
 
      for (int i = 0; i < faces.length; i++) {
         // Wenn das Element "faces[i]" null ist, eine detaillierte Ausgabe und eine Ausnahme auslösen
@@ -232,13 +232,30 @@ void draw() {
         noFill();
         stroke(0, 255, 255); 
         strokeWeight(3);
+        posX=playerPos[i].x + width/2;
+        posY=playerPos[i].y + height/2;
         circle(playerPos[i].x + width/2, playerPos[i].y + height/2, RadiusKreis);
-    }
+         }
 
     System.out.println("Faces am Ende: " + Arrays.toString(faces));      
   } else {
     System.out.println("Keine faces erkannt oder Array ist leer.");
   }
+    }*/
+        Rectangle[] playerPos = Arrays.copyOf(faces, faces.length);
+        if (faces != null && faces.length > 0){
+        
+        posY=map (playerPos[0].y,0,camHeight-objectHeight*2,0,height);
+        posX=map (playerPos[0].x,0,camWidth-objectWidth*2,camWidth,width);
+        }
+        noFill();
+        stroke(0, 255, 255); 
+        strokeWeight(3);
+        rect(posX,posY,50,50);
+        circle(posX,posY,Radius);
+        
+       
+   
 
   
 
@@ -256,13 +273,38 @@ void draw() {
   //popMatrix();
   //leaves.debugLeaves();
   //leaves.display();
-  
-}
+ } 
+
+ float Radius(){   
+   float Radius = getLautstärke();
+   println("Amplitude: " + Radius);
+   RadiusKreis= map(Radius,0,0.02,300,500); // Amplitude wird hoch skalliert
+   if(RadiusKreis>500){RadiusKreis=500;}
+   if(RadiusKreis<300){RadiusKreis=300;}
+   return RadiusKreis;
+ } 
 
 void captureEvent(Capture c) {
   c.read();
 }
-
+PVector MoveLeaf(PVector Leaf){
+   println("velocity außerhalb:"+dist(posX,posY,Leaf.x,Leaf.y));
+   println("playerPosx"+posX);
+   println("playerPosy"+posY);
+   println("Leafx"+ Leaf.x);
+   println("Leafy"+ Leaf.y);
+    if(dist(posX,posY,Leaf.x,Leaf.y)<Radius){
+      println("velocity:"+dist(posX,posY,Leaf.x,Leaf.y));
+    float velocityLeaf=Radius-dist(posX,posY,Leaf.x,Leaf.y);
+    float xDiffrence=Leaf.x-posX;
+    float yDiffrence=Leaf.y-posY;
+    PVector leafVector= new PVector(velocityLeaf,xDiffrence,yDiffrence);
+    return leafVector;
+    }else{
+      PVector Error= new PVector(0,0,0);
+      return Error;
+    }
+  }
 float getLautstärke() {
   return input.mix.level();
 }
