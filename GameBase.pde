@@ -251,7 +251,7 @@ void draw() {
         noFill();
         stroke(0, 255, 255); 
         strokeWeight(3);
-        rect(posX,posY,50,50);
+        rect(posX-objectWidth/2,posY-objectHeight/2,50,50);
         circle(posX,posY,Radius);
         
        
