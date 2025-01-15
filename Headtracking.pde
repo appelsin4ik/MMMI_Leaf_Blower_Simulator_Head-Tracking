@@ -1,4 +1,0 @@
-class Headtracking extends GameBase{
-
-
-}
