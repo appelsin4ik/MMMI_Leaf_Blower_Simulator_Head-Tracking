@@ -183,7 +183,10 @@ void draw() {
         System.out.println("playerPos: x: " + playerPos[i].x + ", y: " + playerPos[i].y +
                            ", width: " + playerPos[i].width + ", height: " + playerPos[i].height);
                            
-        rect(playerPos[i].x - objectWidth / 2 + width/2, playerPos[i].y - objectHeight / 2 + height/2, objectHeight, objectWidth);
+      //  rect(playerPos[i].x - objectWidth / 2 + width/2, playerPos[i].y - objectHeight / 2 + height/2, objectHeight, objectWidth); //Position Spieler Rechteck auf Spielfeld
+      //  rect(playerPos[i].x - objectWidth / 2 * width / camWidth, playerPos[i].y - objectHeight / 2 * height / camHeight, objectHeight, objectWidth); //Position Spieler Rechteck auf Spielfeld
+         rect(playerPos[i].x * 4 - objectWidth / 2 , playerPos[i].y  * 4 - objectHeight / 2 , objectHeight, objectWidth); //Position Spieler Rechteck auf Spielfeld
+        
         noFill();
         stroke(0, 255, 255); 
         strokeWeight(3);

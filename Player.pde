@@ -19,8 +19,8 @@ class Player extends GameBase{
 
 void display(Rectangle[] faces){
   
-  fill(255,0,0);
-  noStroke();
+ // fill(255,0,0);
+ // noStroke();
   /*
   for (int i = 0; i < faces.length; i++){
     rect(faces[i].x - objectWidth / 2 ,faces[i].y - objectHeight / 2 , objectWidth, objectHeight);

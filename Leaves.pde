@@ -52,10 +52,7 @@ class Leaves extends GameBase{
       
       System.out.println("Blatt display try bei x:"+ leaf.x +"y: "+leaf.y );
       
-         if (leaf == null) {
-         println("Null-Wert bei Index " + i + " in leaves.");
-         continue; // Überspringe diesen Eintrag
-         }
+
       
       
       println("Blatt vor rect(): x=" + leaf.x + ", y=" + leaf.y);
