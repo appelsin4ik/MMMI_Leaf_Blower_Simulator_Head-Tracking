@@ -1,7 +1,8 @@
-class Leaves extends GameBase{
+class Leaves extends Blower {
   
   
   ArrayList<PVector> leaves;
+  ArrayList<PVector> velLeaves;
   int AMOUNT = 0;
   int wait_sec = 1000 * 1;
   
@@ -22,6 +23,7 @@ class Leaves extends GameBase{
         float x = (int)random(camWidth, width);
         float y = (int)random(height);
         leaves.add(new PVector(x, y));
+        velLeaves.add(new PVector(0,0,0));
         System.out.println("Blatt generiert bei x:" + x + " y: " + y);
     }
   }
@@ -49,14 +51,20 @@ class Leaves extends GameBase{
    
     for (int i = 0; i < leaves.size(); i++) {
       PVector leaf = leaves.get(i); // Hole das aktuelle PVector-Objekt
-      
-      System.out.println("Blatt display try bei x:"+ leaf.x +"y: "+leaf.y );
-      
-         if (leaf == null) {
+      if (leaf == null) {
          println("Null-Wert bei Index " + i + " in leaves.");
          continue; // Überspringe diesen Eintrag
          }
+      System.out.println("Blatt display try bei x:"+ leaf.x +"y: "+leaf.y );
+      PVector velLeaf=MoveLeaf(leaf);
+      if(velLeaf.z>0){
+      float vel=20-velLeaf.z;
+      float xChange=velLeaf.x*vel;
+      float yChange=velLeaf.x*vel;
+      leaf.x=leaf.x+xChange;
+      leaf.y=leaf.y+yChange;
       
+      }
       
       println("Blatt vor rect(): x=" + leaf.x + ", y=" + leaf.y);
       try {

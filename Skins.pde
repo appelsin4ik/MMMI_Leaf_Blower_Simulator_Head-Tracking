@@ -1,4 +1,4 @@
-class Skins extends GameBase{
+class Skins {
  /* 
  //Skins für den Player
  void playerDisplay(player){              //hier Leaf Aussehen machen
