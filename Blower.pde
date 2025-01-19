@@ -1,12 +1,12 @@
-class Blower {  
+class Blower extends GameBase {  
   PVector pos, vel;
-  float rotation, objectWidth, objectHeight;
+  float radius;
   boolean isStartedOnce = true;
 
   Blower() {
     pos = new PVector(width/2, height/2);
     vel = new PVector(5, 5);
-    Radius=10;
+    radius=Radius();
     rotation = 0;
     objectWidth = 50;
     objectHeight = 50;
@@ -41,18 +41,7 @@ class Blower {
     println("Scaled Pos X: " + (pos.x * 2));
     println("Scaled Pos Y: " + (pos.y * 2));
   }
-  PVector MoveLeaf(PVector Leaf){
-    if(dist(pos.x,pos.y,Leaf.x,Leaf.y)<Radius){
-    float velocityLeaf=dist(pos.x,pos.y,Leaf.x,Leaf.y);
-    float xDiffrence=Leaf.x-pos.x;
-    float yDiffrence=Leaf.y-pos.y;
-    PVector leafVector= new PVector(velocityLeaf,xDiffrence,yDiffrence);
-    return leafVector;
-    }else{
-      PVector Error= new PVector(0,0,0);
-      return Error;
-    }
-  }
+  
   void move(int i) {
     // nach links bewegen
     if (i == -1)  {

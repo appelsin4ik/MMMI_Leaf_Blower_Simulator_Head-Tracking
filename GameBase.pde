@@ -10,21 +10,25 @@ import java.awt.geom.Rectangle2D;
 import processing.core.PImage;
 import ddf.minim.*;
 
-
 Minim minim;
 AudioInput input;
 PGraphics graphics;
 Capture video;
 OpenCV opencv;
 Player player;
-Leaves leaves;    
-int camWidth = 640;
-int camHeight = 360;
+Leaves leaves;
+/*int camWidth = 640;
+int camHeight = 360;*/
+int camWidth,camHeight;
+int score = 0;
 Rectangle playerPos = new Rectangle(0,0,0,0);
 int[] pPosX;
 int[] pPosY;
+float posX=500;
+float posY=500;
 float rotation, objectWidth = 50, objectHeight = 50;
 float RadiusKreis=0;
+float Radius;
 
 
 
@@ -52,13 +56,13 @@ void setup() {
   
  
    //Spracherkenneung
-  minim = new Minim(this);
-  input = minim.getLineIn(Minim.MONO, 1024); //Audio Input
+    minim = new Minim(this);
+    input = minim.getLineIn(Minim.MONO, 1024); //Audio Input
 
 
 
 
-  
+   
   //Kamera Setup
   String[] cameras = Capture.list();
   if (cameras.length == 0) {
@@ -73,9 +77,10 @@ void setup() {
   
   
   //Erstellen von Leaves + -> Klasse
+  println("test1");
   leaves = new Leaves( 15, width, height); //Leaves werden generiert, steht nur hier vorne, vor video..., um ohne Kamera zu checken ob es funktioniert
   leaves.debugLeaves(); //zeigt alle Leaf-Positionen an
-  
+  println("testnachLeaf");
   
   
   //Gesichserkennung
@@ -110,6 +115,8 @@ void setup() {
     println("Fehler in Setup: " + e.getMessage());
     stop();
     }
+    
+   
   
 }
 
@@ -122,13 +129,27 @@ void setup() {
 
 
 void draw() {     
-
+  
   //Hintergrund Rasen
   PImage grass;
   grass = loadImage("grass.jpg");    //später schöneres Bild von Gras oder Rasen nehmen oder Pixelart selbst erstellen
   grass.resize(width,height);
-  background(grass);
-   
+  
+  //background(grass);
+  image(grass,0,0);
+  
+  //Scoreboard
+  tint(0,126);
+  image(grass,0,height/3,width/3,height);
+  noTint();
+  textSize(100);
+  fill(240, 188, 15);
+  text("Scoreboard",width/17,height/3 +100);
+  textSize(50);
+  fill(0, 408, 0);
+  text("Points:    ",width/27,height/3 + 200);
+  text(leaves.getScore(),width/10,height/3 + 200);
+  
   
   //Saves the Matrix (display)
   //pushMatrix();
@@ -140,15 +161,18 @@ void draw() {
     println("Fehler in draw: "+ e.getMessage());
     stop();
   }
+  
+  
     
   image(video, 0, 0);  //Position des Kamerafensters
   noFill();            //Rechteck wird nicht gefüllt (Rechteck Gesicht)
   stroke(0, 255, 255); //Farbe vom Rechteck
   strokeWeight(3);     //Liniendicke Rechteck
-   
   
   
   
+  
+ // noTint();
   
   
    //Rectangle[] faces = opencv.detect();           //Position Gesicht Kamera
@@ -191,11 +215,7 @@ void draw() {
   
     
     
-    
-   float Radius = getLautstärke();
-   println("Amplitude: " + Radius);
-   RadiusKreis= map(Radius,0,0.02,50,300); // Amplitude wird hoch skalliert
-    
+ 
     
     
     
@@ -205,12 +225,11 @@ void draw() {
     
 
     //Blower/PLayer Display
-  if (faces != null && faces.length > 0) {
+ /* if (faces != null && faces.length > 0) {
     //System.out.println("Faces vor der Übergabe: " + Arrays.toString(faces));
   
-    
-    fill(255, 0, 0);
-    noStroke();
+  
+   
 
      for (int i = 0; i < faces.length; i++) {
         // Wenn das Element "faces[i]" null ist, eine detaillierte Ausgabe und eine Ausnahme auslösen
@@ -232,13 +251,32 @@ void draw() {
         noFill();
         stroke(0, 255, 255); 
         strokeWeight(3);
+        posX=playerPos[i].x + width/2;
+        posY=playerPos[i].y + height/2;
         circle(playerPos[i].x + width/2, playerPos[i].y + height/2, RadiusKreis);
-    }
+         }
 
     System.out.println("Faces am Ende: " + Arrays.toString(faces));      
   } else {
     System.out.println("Keine faces erkannt oder Array ist leer.");
   }
+    }*/
+        Radius= Radius();
+        Rectangle[] playerPos = Arrays.copyOf(faces, faces.length);
+        if (faces != null && faces.length > 0){
+        
+        posY=map (playerPos[0].y,0,camHeight-objectHeight*2,0,height);
+        posX=map (playerPos[0].x,0,camWidth-objectWidth*2,camWidth,width);
+        }
+        noFill();
+        stroke(0, 255, 255); 
+        strokeWeight(3);
+        rect(posX-objectWidth/2,posY-objectHeight/2,50,50);
+        println("posY pre"+posY);
+        circle(posX,posY,Radius*2);
+        
+       
+   
 
   
 
@@ -256,19 +294,51 @@ void draw() {
   //popMatrix();
   //leaves.debugLeaves();
   //leaves.display();
-  
-}
+ } 
+
+ float Radius(){   
+   float Radius = getLautstärke();
+   println("Amplitude: " + Radius);
+   RadiusKreis= map(Radius,0,0.02,100,300); // Amplitude wird hoch skalliert
+   if(RadiusKreis>300){RadiusKreis=300;}
+   if(RadiusKreis<100){RadiusKreis=100;}
+   return RadiusKreis;
+ } 
 
 void captureEvent(Capture c) {
   c.read();
 }
-
+PVector MoveLeaf(PVector Leaf){
+   println("velocity außerhalb:"+dist(posX,posY,Leaf.x,Leaf.y));
+   println("playerPosx"+posX);
+   println("playerPosy"+posY);
+   println("Leafx"+ Leaf.x);
+   println("Leafy"+ Leaf.y);
+   println("radius"+Radius);
+    if(((dist(posX,posY,Leaf.x,Leaf.y)<Radius) && (dist(posX,posY,Leaf.x,Leaf.y)>=0)) || (dist(posX,posY,Leaf.x,Leaf.y)>((-1)*Radius) && (dist(posX,posY,Leaf.x,Leaf.y)<=0))  ){
+      println("velocity:"+dist(posX,posY,Leaf.x,Leaf.y));
+    float velocityLeaf=(Radius-dist(posX,posY,Leaf.x,Leaf.y))*0.01;
+    println("velocityafternerf"+velocityLeaf);
+    float xDiffrence=Leaf.x-posX;
+    float yDiffrence=Leaf.y-posY;
+    println("xDiffrence"+ xDiffrence);
+    println("yDiffrence"+ yDiffrence);
+    PVector leafVector= new PVector(xDiffrence,yDiffrence,velocityLeaf);
+    println("leafvec"+ leafVector);
+    return leafVector;
+    }else{
+      println("Error");
+      PVector Error= new PVector(0,0,0);
+      return Error;
+    }
+  }
 float getLautstärke() {
   return input.mix.level();
 }
 
 void mouseClicked(){
   println(mouseX + ";" + mouseY);
+  exit();
 }
 
 void stop() {
