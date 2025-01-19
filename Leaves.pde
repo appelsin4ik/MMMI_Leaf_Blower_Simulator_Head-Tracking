@@ -50,8 +50,6 @@ class Leaves  {
         println("Keine Blätter in der Liste.");
         return;
     }
-    
-
    
     for (int i = 0; i < leaves.size(); i++) {
       PVector leaf = leaves.get(i); // Hole das aktuelle PVector-Objekt
@@ -96,8 +94,22 @@ class Leaves  {
               leafDeleter(i);
             }
             else{
-            fill(255, 255, 0);
-            rect(leaf.x, leaf.y, 20, 20); // Zeichne Blatt
+                    float randomShape = random(0,100);
+                    
+                    if(randomShape < 50){
+                        noStroke();
+                        fill(255, 255, 0);
+                        //rect(leaf.x, leaf.y, 20, 20); // Zeichne Blatt
+                        ellipse(leaf.x, leaf.y, 20,30); // Zeichne Blatt
+                    }else{
+                        noStroke();
+                        fill(255, 255, 0);
+                        //rect(leaf.x, leaf.y, 20, 20); // Zeichne Blatt
+                        ellipse(leaf.x, leaf.y, 30,20); // Zeichne Blatt
+                    }
+              
+              
+                    
             }
       } catch (Exception e) {
             println("Fehler beim Zeichnen des Rechtecks: " + e.getMessage());
@@ -113,6 +125,11 @@ class Leaves  {
     scoreboard=scoreboard+100;
     
   }
+  
+  int getScore(){
+    return scoreboard;
+  }
+  
     //Leaves bouncing
  /* void bounce(float cx, float cy, float radius, float rx, float ry, float rw, float rh){
       // temporary variables to set edges for testing

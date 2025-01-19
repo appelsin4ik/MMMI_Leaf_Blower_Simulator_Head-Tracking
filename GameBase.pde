@@ -21,6 +21,7 @@ Leaves leaves;
 /*int camWidth = 640;
 int camHeight = 360;*/
 int camWidth,camHeight;
+int score = 0;
 Rectangle playerPos = new Rectangle(0,0,0,0);
 int[] pPosX;
 int[] pPosY;
@@ -56,13 +57,13 @@ void setup() {
   
  
    //Spracherkenneung
-  minim = new Minim(this);
-  input = minim.getLineIn(Minim.MONO, 1024); //Audio Input
+    minim = new Minim(this);
+    input = minim.getLineIn(Minim.MONO, 1024); //Audio Input
 
 
 
 
-  
+   
   //Kamera Setup
   String[] cameras = Capture.list();
   if (cameras.length == 0) {
@@ -115,6 +116,8 @@ void setup() {
     println("Fehler in Setup: " + e.getMessage());
     stop();
     }
+    
+   
   
 }
 
@@ -127,13 +130,27 @@ void setup() {
 
 
 void draw() {     
-
+  
   //Hintergrund Rasen
   PImage grass;
   grass = loadImage("grass.jpg");    //später schöneres Bild von Gras oder Rasen nehmen oder Pixelart selbst erstellen
   grass.resize(width,height);
-  background(grass);
-   
+  
+  //background(grass);
+  image(grass,0,0);
+  
+  //Scoreboard
+  tint(0,126);
+  image(grass,0,height/3,width/3,height);
+  noTint();
+  textSize(100);
+  fill(240, 188, 15);
+  text("Scoreboard",width/17,height/3 +100);
+  textSize(50);
+  fill(0, 408, 0);
+  text("Points:    ",width/27,height/3 + 200);
+  text(leaves.getScore(),width/10,height/3 + 200);
+  
   
   //Saves the Matrix (display)
   //pushMatrix();
@@ -145,15 +162,18 @@ void draw() {
     println("Fehler in draw: "+ e.getMessage());
     stop();
   }
+  
+  
     
   image(video, 0, 0);  //Position des Kamerafensters
   noFill();            //Rechteck wird nicht gefüllt (Rechteck Gesicht)
   stroke(0, 255, 255); //Farbe vom Rechteck
   strokeWeight(3);     //Liniendicke Rechteck
-   
   
   
   
+  
+ // noTint();
   
   
    //Rectangle[] faces = opencv.detect();           //Position Gesicht Kamera
@@ -319,6 +339,7 @@ float getLautstärke() {
 
 void mouseClicked(){
   println(mouseX + ";" + mouseY);
+  exit();
 }
 
 void stop() {
