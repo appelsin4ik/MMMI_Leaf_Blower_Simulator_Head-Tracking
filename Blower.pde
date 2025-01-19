@@ -1,15 +1,17 @@
-class Blower {  
+class Blower extends GameBase {  
   PVector pos, vel;
-  float rotation, objectWidth, objectHeight;
+  float radius;
   boolean isStartedOnce = true;
 
   Blower() {
     pos = new PVector(width/2, height/2);
     vel = new PVector(5, 5);
+    radius=Radius();
     rotation = 0;
     objectWidth = 50;
     objectHeight = 50;
   }
+  
 
   void display() {
     pos.x = constrain(pos.x, 25, width-25);
@@ -39,7 +41,7 @@ class Blower {
     println("Scaled Pos X: " + (pos.x * 2));
     println("Scaled Pos Y: " + (pos.y * 2));
   }
-
+  
   void move(int i) {
     // nach links bewegen
     if (i == -1)  {
