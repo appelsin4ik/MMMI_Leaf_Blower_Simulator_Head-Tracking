@@ -15,7 +15,6 @@ AudioInput input;
 PGraphics graphics;
 Capture video;
 OpenCV opencv;
-Player player;
 Leaves leaves;
 /*int camWidth = 640;
 int camHeight = 360;*/
@@ -103,9 +102,7 @@ void setup() {
 
   
   
-  
-  //Erstellen von Player + -> Klasse
-  player = new Player();
+
   
   //video.start();
   
