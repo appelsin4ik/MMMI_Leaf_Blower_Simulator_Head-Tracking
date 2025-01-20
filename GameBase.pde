@@ -145,7 +145,7 @@ void draw() {
   textSize(50);
   fill(0, 408, 0);
   text("Points:    ",width/27,height/3 + 200);
-  text(leaves.getScore(),width/10,height/3 + 200);
+  text(leaves.getScore(),width/10+50,height/3 + 200);
   
   
   //Saves the Matrix (display)
